@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %} Blog {% endblock %}
+{% block content %}
+<section id="news">
+    <div class="container">
+        <div class="section-content">
+            <div class="row">
+                {% for blog in blogs %}
+                <div class="col-sm-6 col-md-4">
+                    <article class="post clearfix mb-30 mb-sm-30">
+                        <div class="entry-header">
+                            <div class="post-thumb thumb">
+                                <img src="{{blog.image.url}}" alt="" class="img-responsive img-fullwidth">
+                            </div>
+                        </div>
+                        <div class="entry-content p-20 pr-10 bg-lighter">
+                            <div class="entry-meta media mt-0 no-bg no-border">
+
+
+                            </div>
+                            <p class="mt-10">{{blog.description|truncatechars:80}}</p>
+                            <a class="btn btn-theme-colored2 btn-sm text-white" href="{{blog.get_absolute_url}}">
+                                View Details</a>
+                            <div class="clearfix"></div>
+                        </div>
+                    </article>
+                </div>
+
+                {% endfor %}
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+    

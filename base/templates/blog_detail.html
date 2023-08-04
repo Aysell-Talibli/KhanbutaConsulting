@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} Blog {% endblock %}
+{% block content %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="sidebar sidebar-left mt-sm-30">
+                 
+                 
+                    <div class="widget">
+                        <h5 class="widget-title line-bottom">Latest News</h5>
+                        <div class="latest-posts">
+                            {% for blog in blogs %}
+                            <article class="post media-post clearfix pb-0 mb-10">
+                                <a class="post-thumb" href="{{blog.get_absolute_url}}"><img style="height: 50px;" src="{{blog.image.url}}"
+                                        alt=""></a>
+                                <div class="post-right">
+                                    <h5 class="post-title mt-0"><a href="{{blog.get_absolute_url}}">{{blog.title|truncatechars:25}}</a>
+                                    </h5>
+                                    <p>{{blog.description|truncatechars:25}}</p>
+                                </div>
+                            </article>
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+            <div class="col-md-9 blog-pull-right">
+                <div class="blog-posts single-post">
+                    <article class="post clearfix mb-0">
+                        <div class="entry-header">
+                            <div class="post-thumb thumb"> <img src="{{blog.image.url}}" alt=""
+                                    class="img-responsive img-fullwidth"> </div>
+                        </div>
+                        <div class="entry-title pt-10 pl-15">
+                            <h4><a class="text-uppercase" href="{{blog.get_absolute_url}}">{{blog.title}} </a></h4>
+                        </div>
+                      
+                        <div class="entry-content mt-10">
+                            <p class="mb-15">{{blog.description}}</p>
+                            
+                       
+                        
+                        </div>
+                    </article>
+              
+                  
+           
+               
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+    

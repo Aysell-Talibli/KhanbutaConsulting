@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block title %} About {% endblock %}
+{% block content %}
+    
+<section class="">
+    <div class="container">
+        <div class="section-content">
+            <div class="row features-style1">
+                <div class="col-md-7">
+                    <h2 class="mt-0 text-theme-colored">{{about.title}}</h2>
+                    <p class="">{{about.text}}</p>
+                    {% for data in about.about_details.all %}
+                    <div class="mt-20">
+                        <div class="left media p-0 mb-10"> <a href="{% url 'about' %}" class="pull-left flip">
+                            {{data.image|safe}}
+                        </a>
+                            <div class="media-body">
+                                <h5 class="mt-0">{{data.title}}</h5>
+                                <p>{{data.text}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    
+                </div>
+                <div class="col-md-5">
+                    <div class="text-center">
+                        <img src="{{about.image.url}}" width="500" height="500" alt="">
+                    </div>
+                    <div class="clear"></div>
+                    <!-- <img src="images/services/1.png" alt=""> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section:Service-->
+<section class="bg-silver-light">
+    <div class="container pb-60">
+        <div class="section-title text-center">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <h2 class="text-uppercase line-bottom-double-line-centered mt-0">Our <span
+                            class="text-theme-colored2">Services</span></h2>
+                    <p><p>{{home_service_detail.text}}</p></p>
+                </div>
+            </div>
+        </div>
+        <div class="section-content">
+            <div class="row">
+                <div class="col-md-8">
+                    
+                    <div class="row mb-sm-30">
+                        {% for service in services %}
+                        <div class="col-sm-6 col-md-6">
+                            <div
+                                class="service-box icon-box iconbox-theme-colored bg-white p-30 mb-30 border-1px">
+                            
+                                <a class="icon icon-dark border-left-theme-colored2-3px pull-left flip mb-0 mr-0 mt-5"
+                                    href="{{service.get_absolute_url}}">
+                                    <img src="{{service.image.url}}">
+                                    
+                                </a>
+                                <div class="icon-box-details">
+                                    <h4 class="icon-box-title m-0 mb-5">{{service.name}}</h4>
+                                    <p class="text-gray mb-0">{{service.description|truncatechars:60}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-30 mt-0 bg-theme-colored">
+                        <h3 class="title-pattern mt-0"><span class="text-white">Request A<span
+                                    class="text-theme-colored2"> Call Back</span></span>
+                        </h3>
+                        <!-- Appilication Form Start-->
+                        <form id="reservation_form" name="reservation_form" class="reservation-form mt-20"
+                            method="post" action="{% url 'about' %}">
+                             {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group mb-20">
+                                        <input placeholder="Enter Name" type="text" id="reservation_name"
+                                            name="name" required="" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-20">
+                                        <input placeholder="Email" type="text" id="reservation_email"
+                                            name="email" class="form-control" required="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-20">
+                                        <input placeholder="Phone" type="text" id="reservation_phone"
+                                            name="phone" class="form-control" required="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group mb-20">
+                                        <div class="styled-select">
+                                            <select id="person_select" name="service"
+                                                class="form-control" required="">
+                                                <option value="">Choose Service</option>
+                                                {% for service in services %}
+                                                <option value="{{service.name}}">{{service.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <textarea placeholder="Enter Message" rows="3"
+                                            class="form-control required" name="message"
+                                            id="form_message" aria-required="true"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group mb-0 mt-10">
+                                        <input name="form_botcheck" class="form-control" type="hidden"
+                                            value="">
+                                        <button type="submit"
+                                            class="btn btn-colored btn-theme-colored2 text-white btn-lg btn-block"
+                                            data-loading-text="Please wait...">Submit Request</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Application Form End-->
+
+                        <!-- Application Form Validation Start-->
+                        <script type="text/javascript">
+                            $("#reservation_form").validate({
+                                submitHandler: function (form) {
+                                    var form_btn = $(form).find('button[type="submit"]');
+                                    var form_result_div = '#form-result';
+                                    $(form_result_div).remove();
+                                    form_btn.before('<div id="form-result" class="alert alert-success" role="alert" style="display: none;"></div>');
+                                    var form_btn_old_msg = form_btn.html();
+                                    form_btn.html(form_btn.prop('disabled', true).data("loading-text"));
+                                    $(form).ajaxSubmit({
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            if (data.status == 'true') {
+                                                $(form).find('.form-control').val('');
+                                            }
+                                            form_btn.prop('disabled', false).html(form_btn_old_msg);
+                                            $(form_result_div).html(data.message).fadeIn('slow');
+                                            setTimeout(function () {
+                                                $(form_result_div).fadeOut('slow')
+                                            }, 6000);
+                                        }
+                                    });
+                                }
+                            });
+                        </script>
+                        <!-- Application Form Validation Start -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
